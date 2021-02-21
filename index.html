@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+
+
+        .koltukNo {
+            display: none;
+            width: 180px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container col-md-4 mt-2">
+        <div class="form-group">
+            <p class="h3">Tiyatro Kayıt Formu</p>
+            <label class="form-control" for="id">Id</label>
+            <input class="form-control mt-2" type="text" id="id">
+            <label class="form-control mt-2" for="isim">Katılımcı İsmi</label>
+            <input class="form-control mt-2" type="text" id="isim">
+            <input class="form-check-input mt-2" type="checkbox" id="checkKatilim" onclick="checkChange()">
+            <label form-check-label> Tiyatroya geliyor</label>
+            <label class="form-control mt-2" for="koltukNo mt-2" id="koltukNoLabel">Koltuk Numarası</label>
+            <input class="form-control mt-2" type="text" id="koltukNoInput" disabled>
+            <button class="btn btn-primary mt-2" onclick="onayla()">Onayla</button>
+        </div>
+    </div>
+
+    <script>
+
+        var liste = new Array()
+        var koltukNoInput = document.getElementById("koltukNoInput");
+        var idInput = document.getElementById("id");
+        var katilimciIsmiInput = document.getElementById("isim");
+        var checkbox = document.getElementById("checkKatilim");
+
+
+        function checkChange() {
+            if (this.checkbox.checked) {
+                this.koltukNoInput.removeAttribute("disabled");
+            }
+            else {
+                this.koltukNoInput.setAttribute("disabled", true);
+            }
+        }
+
+
+        function onayla() {
+            let koltukNo = koltukNoInput.value;
+            let id = idInput.value;
+            let isim = katilimciIsmiInput.value
+            if (id != null && id != "" && koltukNo != null && koltukNo != "") {
+                var kaydaUygun = 1;
+
+                liste.forEach(kayit => {
+                    if (kayit.id == id) {
+                        kaydaUygun = 0;
+                        alert("Kullanıcı id'si ile daha önce kayıt yapılmış...");
+                        console.log("Kayıt başarısız...")
+
+                        console.log("Katilimcilar:");
+                        console.log(this.liste);
+
+                        return;
+                    }
+                    if (kayit.koltukNo == koltukNo) {
+                        kaydaUygun = 0
+                        alert("Girilen koltuk dolu...");
+                        console.log("Kayıt başarısız...")
+                        console.log("Katilimcilar:");
+                        console.log(this.liste);
+                        return;
+                    }
+                });
+                if (kaydaUygun == 1) {
+                    var yeniKayit = {
+                        id: id,
+                        koltukNo: koltukNo,
+                        isim: isim
+                    }
+                    console.log("Kayıt başarılı...")
+                    this.liste.push(yeniKayit)
+                    console.log("Katilimcilar:");
+                    console.log(this.liste);
+
+                    verileriTemizle();
+                }
+            }
+
+            else {
+                alert("İd ve koltuk numarası boş bırakılamaz")
+            }
+        }
+        function verileriTemizle() {
+            koltukNoInput.value = null
+            idInput.value = null
+            katilimciIsmiInput.value = null
+            this.checkbox.checked = false
+            this.koltukNoInput.setAttribute("disabled", true)
+
+        }
+    </script>
+
+</body>
+
+</html>
